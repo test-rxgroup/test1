@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище test1Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="BookId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Article" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Author" Type="nvarchar(max)" />
+          <Property Name="PublicationDate" Type="datetime2" Precision="7" />
+          <Property Name="numberOfCopies" Type="int" />
+          <Property Name="CreateAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="DeleteAt" Type="datetime2" Precision="7" />
+          <Property Name="CurrentOwn" Type="int" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FIO" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Birthdate" Type="datetime2" Precision="7" />
+          <Property Name="CreateAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="DeleteAt" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="RecordOwn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="BookId" Type="int" Nullable="false" />
+          <Property Name="DeliveryDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="ReturnDate" Type="datetime2" Precision="7" />
+        </EntityType>
+        <Association Name="FK_Book_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Book" Type="Self.Book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="Book">
+              <PropertyRef Name="CurrentOwn" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RecordOwn_Book">
+          <End Role="Book" Type="Self.Book" Multiplicity="1" />
+          <End Role="RecordOwn" Type="Self.RecordOwn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookId" />
+            </Principal>
+            <Dependent Role="RecordOwn">
+              <PropertyRef Name="BookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RecordOwn_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="RecordOwn" Type="Self.RecordOwn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="RecordOwn">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище test1ModelContainer">
+          <EntitySet Name="Book" EntityType="Self.Book" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RecordOwn" EntityType="Self.RecordOwn" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Book_Customer" Association="Self.FK_Book_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Book" EntitySet="Book" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RecordOwn_Book" Association="Self.FK_RecordOwn_Book">
+            <End Role="Book" EntitySet="Book" />
+            <End Role="RecordOwn" EntitySet="RecordOwn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RecordOwn_Customer" Association="Self.FK_RecordOwn_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="RecordOwn" EntitySet="RecordOwn" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="test1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="test1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Books" EntityType="test1Model.Book" />
+          <EntitySet Name="Customers" EntityType="test1Model.Customer" />
+          <EntitySet Name="RecordOwns" EntityType="test1Model.RecordOwn" />
+          <AssociationSet Name="FK_Book_Customer" Association="test1Model.FK_Book_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Book" EntitySet="Books" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RecordOwn_Book" Association="test1Model.FK_RecordOwn_Book">
+            <End Role="Book" EntitySet="Books" />
+            <End Role="RecordOwn" EntitySet="RecordOwns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RecordOwn_Customer" Association="test1Model.FK_RecordOwn_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="RecordOwn" EntitySet="RecordOwns" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="BookId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Article" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Author" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PublicationDate" Type="DateTime" Precision="7" />
+          <Property Name="numberOfCopies" Type="Int32" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="DeleteAt" Type="DateTime" Precision="7" />
+          <Property Name="CurrentOwn" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="test1Model.FK_Book_Customer" FromRole="Book" ToRole="Customer" />
+          <NavigationProperty Name="RecordOwns" Relationship="test1Model.FK_RecordOwn_Book" FromRole="Book" ToRole="RecordOwn" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FIO" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Birthdate" Type="DateTime" Precision="7" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="DeleteAt" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Books" Relationship="test1Model.FK_Book_Customer" FromRole="Customer" ToRole="Book" />
+          <NavigationProperty Name="RecordOwns" Relationship="test1Model.FK_RecordOwn_Customer" FromRole="Customer" ToRole="RecordOwn" />
+        </EntityType>
+        <EntityType Name="RecordOwn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="BookId" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ReturnDate" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Book" Relationship="test1Model.FK_RecordOwn_Book" FromRole="RecordOwn" ToRole="Book" />
+          <NavigationProperty Name="Customer" Relationship="test1Model.FK_RecordOwn_Customer" FromRole="RecordOwn" ToRole="Customer" />
+        </EntityType>
+        <Association Name="FK_Book_Customer">
+          <End Type="test1Model.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="test1Model.Book" Role="Book" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="Book">
+              <PropertyRef Name="CurrentOwn" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RecordOwn_Book">
+          <End Type="test1Model.Book" Role="Book" Multiplicity="1" />
+          <End Type="test1Model.RecordOwn" Role="RecordOwn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Book">
+              <PropertyRef Name="BookId" />
+            </Principal>
+            <Dependent Role="RecordOwn">
+              <PropertyRef Name="BookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RecordOwn_Customer">
+          <End Type="test1Model.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="test1Model.RecordOwn" Role="RecordOwn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="RecordOwn">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище test1ModelContainer" CdmEntityContainer="test1Entities">
+          <EntitySetMapping Name="Books">
+            <EntityTypeMapping TypeName="test1Model.Book">
+              <MappingFragment StoreEntitySet="Book">
+                <ScalarProperty Name="CurrentOwn" ColumnName="CurrentOwn" />
+                <ScalarProperty Name="DeleteAt" ColumnName="DeleteAt" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="numberOfCopies" ColumnName="numberOfCopies" />
+                <ScalarProperty Name="PublicationDate" ColumnName="PublicationDate" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Article" ColumnName="Article" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="test1Model.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="DeleteAt" ColumnName="DeleteAt" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+                <ScalarProperty Name="FIO" ColumnName="FIO" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecordOwns">
+            <EntityTypeMapping TypeName="test1Model.RecordOwn">
+              <MappingFragment StoreEntitySet="RecordOwn">
+                <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
